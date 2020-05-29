@@ -1,0 +1,42 @@
+body {
+  color: @con-font;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+*{
+  font-family: "Helvetica Neue", "Helvetica", "PingFang SC","Hiragino Sans GB", "Microsoft YaHei","SimSun","sans-serif";
+  margin: 0;
+  padding: 0;
+}
+
+// 全屏
+.full {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+// 默认滚动条样式修改
+&::-webkit-scrollbar {
+  height: 11px;
+  width: 11px;
+}
+
+// 滚动块
+&::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.6);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 11px;
+  &:hover {
+    background-color: rgb(128, 128, 128);
+  }
+}
+
+ul > li {
+  list-style: none;
+}

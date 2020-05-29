@@ -1,0 +1,243 @@
+@import './base.less';
+@import './search.less';
+@import './tab.less';
+@import './upload.less';
+@import './ellipsis.less';
+@import './transition.less';
+
+.borderAndBackColor {
+  background-color: @primary ;
+  border-color: @primary ;
+}
+
+.disabled {
+  background-color: #fff;
+  color: #333;
+  border-color: #ccc;
+}
+// button
+.el-button--primary {
+  .borderAndBackColor;
+  &:hover,
+  &:active,
+  &:focus {
+    .borderAndBackColor;
+  }
+  color: #fff;
+}
+
+// button default
+.el-button--default {
+  border-color: @primary;
+  color: @primary;
+  &:hover,
+  &:active,
+  &:focus {
+    background: #fff;
+    border-color: @primary;
+    color: @primary;
+  }
+}
+
+// table
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+  .borderAndBackColor;
+}
+.el-table {
+  color: #333;
+}
+
+.el-table thead.is-group th {
+  background: #e7e9ec;
+}
+
+.el-table thead th,
+.el-table thead tr {
+  background-color: #e7e9ec;
+  color: #333;
+}
+
+.el-table--border,
+.el-table--group {
+  border: 1px solid #797979;
+}
+
+.el-table td,
+.el-table th.is-leaf {
+  border-bottom: 1px solid #797979;
+}
+
+.el-table--border th,
+.el-table--border th.gutter:last-of-type {
+  border-bottom: 1px solid #797979;
+}
+
+.el-table--border td,
+.el-table--border th {
+  border-right: 1px solid #797979;
+}
+
+// table sortTable
+.el-table .descending .sort-caret.descending {
+  border-top-color: @primary;
+}
+
+.el-table .ascending .sort-caret.ascending {
+  border-bottom-color: @primary
+}
+
+// table color
+.table-click-color {
+  color: @primary !important;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+// pagination
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0px;
+}
+
+.el-pagination__sizes .el-input .el-input__inner:hover {
+  border-color: @primary;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+  background-color: @primary;
+}
+
+.el-pagination.is-background .el-pager li {
+  color: #333;
+}
+
+.el-pagination__total {
+  color: #333;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label{
+  color:#333;
+}
+
+// .el-pagination.is-background .el-pager li:not(.disabled):hover {
+//   color: @primary;
+// }
+
+// input
+.el-input__inner {
+  border: 1px solid #ccc;
+}
+
+.el-select .el-input__inner:focus,
+.el-select .el-input.is-focus .el-input__inner,
+.el-input.is-active .el-input__inner,
+.el-input__inner:focus {
+  border-color: @primary;
+}
+
+.el-select-dropdown__item.selected {
+  color: @primary;
+}
+
+// input disabled
+.el-input.is-disabled .el-input__inner {
+  .disabled
+}
+
+// tooltip
+.tooltip-font {
+  width: 250px;
+  line-height: 20px;
+}
+
+.custom-tooltip {
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
+.custom-tooltip.el-tooltip__popper[x-placement^="top"] .popper__arrow {
+  border-top-color: #000 !important;
+  opacity: 0.8;
+}
+
+.custom-tooltip.el-tooltip__popper[x-placement^="top"] .popper__arrow:after {
+  border-top-color: #000 !important;
+  opacity: 0.8;
+}
+
+// switch
+.el-switch.is-checked .el-switch__core {
+  .borderAndBackColor
+}
+
+
+// date-picker
+.el-range-editor.is-active, .el-range-editor.is-active:hover {
+  border-color: @primary;
+}
+
+// radio
+.el-radio__input.is-checked .el-radio__inner {
+  .borderAndBackColor
+}
+
+.el-radio__input.is-checked+.el-radio__label {
+  color: @primary;
+}
+
+// loading
+
+.el-loading-spinner .path {
+  stroke: @primary;
+}
+
+// message
+.el-message__icon {
+  margin-right: 5px;
+}
+
+.el-message {
+  width: auto;
+  min-width: auto;
+  top: 80px !important;
+  padding: 12px;
+}
+
+// tree
+.el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
+  background-color: @primary;
+  color: #fff;
+}
+
+// cascader
+.el-cascader .el-input .el-input__inner:focus, .el-cascader .el-input.is-focus .el-input__inner {
+  border-color: @primary;
+}
+
+.el-cascader-node.in-active-path, .el-cascader-node.is-active, .el-cascader-node.is-selectable.in-checked-path {
+  color: @primary;
+}
+
+// textarea
+.el-textarea__inner:focus {
+  border-color: @primary;
+}
+
+// textarea disabled
+.el-textarea.is-disabled .el-textarea__inner {
+  .disabled
+}
+
+// 下来菜单
+.el-dropdown-menu__item:focus, .el-dropdown-menu__item:not(.is-disabled):hover {
+  color: @primary;
+}
+
+.el-breadcrumb__item:last-child .el-breadcrumb__inner:hover {
+  color: @primary;
+}
+
+
+// loading
+// .el-loading-spinner i,.el-loading-spinner .el-loading-text  {
+//   color: #fff
+// }

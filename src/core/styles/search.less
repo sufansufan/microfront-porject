@@ -1,0 +1,36 @@
+.search {
+  & > .select {
+    display: flex;
+    flex-wrap: wrap;
+    & > div {
+      display: flex;
+      margin-right: 20px;
+      margin-bottom: 10px;
+      line-height: 30px;
+      & > span {
+        min-width: 60px;
+        margin-right: 10px;
+        line-height: 30px;
+        text-align: right;
+      }
+      .step-span {
+        margin-left: 10px;
+        min-width: 0px;
+      }
+      &:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
+  & > .btn {
+    display: flex;
+    & > div {
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+  }
+  .space {
+    margin-left: 3px;
+  }
+
+}
