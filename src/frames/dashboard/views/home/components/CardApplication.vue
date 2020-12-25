@@ -80,7 +80,7 @@
               <el-table-column
                 prop="date"
                 label="打卡时间"
-                width="150"
+                width="160"
                 header-align="center"
               />
               <el-table-column
@@ -131,7 +131,7 @@
         type="primary"
         @click="submitForm('ruleForm')"
       >提交</el-button>
-      <el-button @click="resetForm('ruleForm')">取消</el-button>
+      <el-button class="cancel-btn" @click="resetForm('ruleForm')">取消</el-button>
     </el-form-item>
   </el-form>
 </template>

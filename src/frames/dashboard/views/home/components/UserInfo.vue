@@ -1,34 +1,81 @@
 <template>
   <div class="user-info">
     <div class="photo">
-      <img src="../../../assets/home/photo-man.png" alt="">
+      <img :src="headImg" alt="">
     </div>
     <div class="box">
       <p class="name">
-        <strong>张三</strong>
+        <strong>{{ userInfo.baseInfo.name }}</strong>
       </p>
       <p class="company one-ellipsis">
-        北京阡陌十方信息技术有限公司西安分公司
+        {{ userInfo.baseInfo.orgName }}
       </p>
-      <p class="post">
-        <span>普通员工岗(研发工程师)</span>
-        <span>|产品部</span>
+      <p class="post one-ellipsis">
+        <span @click="postDetails">{{ userInfo.baseInfo.postName }}</span>
+        <span> {{ userInfo.baseInfo.mainOrg ? ` | ${userInfo.baseInfo.mainOrg }` : '' }}</span>
       </p>
       <div class="btn">
-        <div>
-          兼职：5
-        </div>
-        <div>
-          项目任职：3
-        </div>
+        <el-popover width="300" trigger="click">
+          <div v-for="item in userInfo.partTimeJobInfo" :key="item.id" style="margin-bottom: 5px">
+            <div class="post-name" style="color: #333">{{ item.postName }}</div>
+            <div style="font-size: 12px; color:#999">{{ item.orgName }}</div>
+          </div>
+          <div slot="reference" class="job-num">
+            兼职：{{ userInfo.partTimeJobInfo && userInfo.partTimeJobInfo.length || 0 }}
+          </div>
+        </el-popover>
+        <el-popover width="300" trigger="click">
+          <!-- <div>2222</div> -->
+          <div slot="reference" class="job-num serving">
+            项目任职：{{ userInfo.projectInfo && userInfo.projectInfo.length || 0 }}
+          </div>
+        </el-popover>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getHeadImg } from '@core/api/personelSet'
 export default {
-
+  props: {
+    userInfo: {
+      type: Object,
+      default: () => {}
+    }
+  },
+  data() {
+    return {
+      headImg: require('../../../assets/home/photo.png')
+    }
+  },
+  watch: {
+    '$store.state.topNav.headerImg': {
+      handler() {
+        this.getImg()
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+  created() {
+    // this.getImg()
+  },
+  methods: {
+    getImg() {
+      getHeadImg().then(({ data }) => {
+        if (data !== null) {
+          this.headImg = data.headImg
+        }
+      })
+    },
+    postDetails() {
+      this.$router.push({
+        name: 'postInfo',
+        query: { type: 'details', post: 'post', id: this.userInfo.baseInfo.postId }
+      })
+    }
+  }
 }
 </script>
 
@@ -36,11 +83,12 @@ export default {
 .user-info {
   text-align: center;
   line-height: 24px;
-  height: 32.7vh;
+  height: 258px;
   position: relative;
   .photo {
     width: 130px;
     height: 130px;
+    border-radius: 50%;
     position: absolute;
     top: 0px;
     left: 0px;
@@ -51,11 +99,12 @@ export default {
     & > img {
       width: 100%;
       height: 100%;
+      border-radius: 50%;
     }
   }
   .box {
     width: calc(90% - 20px);
-    height: calc(26vh - 65px);
+    height: calc(200px - 65px);
     padding: 0px 10px;
     position: absolute;
     right: 5%;
@@ -76,6 +125,7 @@ export default {
       & > span {
         &:first-child {
           color: #0A4C8A;
+          cursor: pointer;
         }
         &:last-child {
           color: #A3A3A3;
@@ -85,21 +135,31 @@ export default {
     .btn {
       display: flex;
       justify-content: space-around;
-      & > div {
+      .job-num {
         width: 120px;
         height: 30px;
         border-radius: 3px;
         color: #fff;
         line-height: 30px;
         margin-top: 5px;
-        &:first-child {
-          background: #FA5151;
-        }
-        &:last-child {
+        background: #FA5151;
+        cursor: pointer;
+        &.serving {
           background: #5195FA;
         }
       }
     }
   }
+  .post-name {
+    color: #333;
+  }
 }
+</style>
+<style lang="less">
+.user-info {
+  .el-popover {
+    background: #f5f5f5;
+  }
+}
+
 </style>

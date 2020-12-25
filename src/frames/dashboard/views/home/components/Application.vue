@@ -17,7 +17,7 @@
         </template>
       </el-breadcrumb>
     </div>
-    <div ref="swiper" class="swiper">
+    <div ref="swiper" v-loading="swiperLoading" class="swiper">
       <el-carousel
         arrow="hover"
         height="250px"
@@ -27,12 +27,12 @@
       >
         <el-carousel-item v-for="(item, index) in swiperList" :key="index">
           <div class="carousel-box">
-            <div v-for="(v, o) in item.children" :key="o" class="carousel-content">
+            <div v-for="(v, o) in item.child" :key="o" class="carousel-content">
               <div class="content-item" @click="itemClick(v, item)">
                 <div class="carousel-image">
-                  <img :src="v.img" alt="">
+                  <img :src="v.icon" alt="">
                 </div>
-                <span>{{ v.title }}</span>
+                <span>{{ v.name }}</span>
               </div>
             </div>
           </div>
@@ -45,6 +45,7 @@
 <script>
 import CrumbBox from '../../../components/CrumbBox'
 import { mapGetters } from 'vuex'
+import { setSessionStorage } from '@core/utils/auth'
 export default {
   components: {
     CrumbBox
@@ -53,7 +54,8 @@ export default {
     return {
       crumbContent: '',
       swiperList: [],
-      applicationList: [
+      swiperLoading: true,
+      /* applicationList: [
         {
           title: '系统管理',
           img: require('../../../assets/application/platform.png'),
@@ -383,8 +385,19 @@ export default {
             {
               title: '合作企业管理',
               img: require('../../../assets/application/dailyCost/cost.png'),
-              url: 'cooperativeEnterprise/businessManagement'
+              url: 'cooperativeEnterprise/cooperativeEnterprise'
             }
+             {
+              title: '材料供应企业',
+              img: require('../../../assets/application/dailyCost/cost.png'),
+              url: 'cooperativeEnterprise/materialSupply'
+            },
+              {
+              title: '系统消息详情',
+              img: require('../../../assets/application/dailyCost/cost.png'),
+              url: 'cooperativeEnterprise/systemDetails'
+            }
+
           ]
         },
         {
@@ -514,39 +527,87 @@ export default {
             }
           ]
         }
-      ],
+      ], */
+      applicationList: [],
       applicationListclone: []
     }
   },
   computed: {
-    ...mapGetters(['pages'])
+    ...mapGetters(['pages', 'menuApplicationList'])
   },
   created() {
-    this.applicationListClone = JSON.parse(
-      JSON.stringify(this.applicationList)
-    )
-  },
-  mounted() {
-    this.handleSwiper()
+    this.swiperLoading = true
+    // if (this.menuApplicationList.length) {
+    //   this.fetchApplication(this.menuApplicationList)
+    // } else {
+    //   this.$store.dispatch('generateRoutes').then(data => {
+    //     this.fetchApplication(data)
+    //   })
+    // }
+    this.$store.dispatch('generateRoutes').then(data => {
+      this.fetchApplication(data)
+    })
   },
   methods: {
-    itemClick(item, parent) {
-      if (Array.isArray(item.children) && item.children.length) {
-        this.applicationList = item.children
-        this.crumbContent = item.title
-        this.$store.dispatch('getBreadCrumb', item)
+    fetchApplication(data) {
+      const list = []
+      data.forEach(item => {
+        const obj = { ...item, child: [] }
+        if (item.child.length) {
+          item.child.forEach(v => {
+            const childObj = {
+              ...v,
+              child: []
+            }
+            obj.child.push(childObj)
+          })
+        }
+        list.push(obj)
+      })
+      this.applicationListClone = JSON.parse(JSON.stringify(list))
+      this.handleApplication(list)
+      this.$nextTick(() => {
+        this.handleSwiper()
+      })
+      this.swiperLoading = false
+    },
+    handleApplication(data) {
+      data.forEach(item => {
+        if (item.child !== null) {
+          if (item.child.length !== 1) {
+            this.applicationList.push(item)
+          } else {
+            this.applicationList.push(item.child[0])
+          }
+        }
+      })
+    },
+    async itemClick(item, parent) {
+      if (Array.isArray(item.child) && item.child.length) {
+        this.applicationList = item.child
+        this.crumbContent = item.name
+        await this.$store.commit('SET_BREADAPPSTATUS', true)
+        await this.$store.dispatch('getBreadCrumb', { data: item })
         this.handleSwiper()
       } else if (item === 'back') {
+        setSessionStorage('applicationId', '')
         if (this.crumbContent === '') return
         this.crumbContent = ''
-        this.applicationList = JSON.parse(
-          JSON.stringify(this.applicationListClone)
-        )
+        this.applicationList = []
+        const data = JSON.parse(JSON.stringify(this.applicationListClone))
+        this.handleApplication(data)
+        // data.forEach(item => {
+        //   if (item.child !== null) {
+        //     this.applicationList.push(item)
+        //   }
+        // })
         this.handleSwiper()
       } else {
-        if (!item.url) return
-        this.$store.dispatch('getBreadCrumb', item)
-        this.$router.push({ path: item.url })
+        if (!item.routeUrl) return
+        if (!this.$store.state.breadcrumb.breadAppStatus) this.$store.dispatch('getBreadCrumb', { data: item })
+        setSessionStorage('applicationId', item.id)
+        item.permissions ? this.$router.push({ path: item.routeUrl, query: { page: item.permissions.split(':')[1] }})
+          : this.$router.push({ path: item.routeUrl })
       }
     },
     handleSwiper() {
@@ -555,11 +616,11 @@ export default {
       this.swiperList = []
       if (this.applicationList.length > num) {
         this.swiperList.push(
-          { children: this.applicationList.splice(0, num) },
-          { children: this.applicationList }
+          { child: this.applicationList.splice(0, num) },
+          { child: this.applicationList }
         )
       } else {
-        this.swiperList.push({ children: this.applicationList })
+        this.swiperList.push({ child: this.applicationList })
       }
     }
   }
@@ -606,6 +667,15 @@ export default {
           }
         }
       }
+    }
+  }
+}
+</style>
+<style lang="less">
+.application {
+  .breadcrumb {
+    .el-breadcrumb__item:last-child .el-breadcrumb__inner:hover {
+      color: #606266;
     }
   }
 }

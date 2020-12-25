@@ -47,7 +47,7 @@ Vue.use(Element.RadioButton)
 Vue.use(Element.Switch)
 Vue.use(Element.Checkbox)
 Vue.use(Element.Switch)
-Vue.use(Element.Checkbox)
+Vue.use(Element.CheckboxGroup)
 Vue.use(Element.Dialog)
 Vue.use(Element.InputNumber)
 Vue.use(Element.Upload)
@@ -60,6 +60,8 @@ Vue.use(Element.Step)
 Vue.use(Element.Popover)
 Vue.use(Element.Tag)
 Vue.use(Element.Calendar)
+Vue.use(Element.Timeline)
+Vue.use(Element.TimelineItem)
 
 Vue.prototype.$message = Element.Message
 Vue.prototype.$msgbox = Element.MessageBox

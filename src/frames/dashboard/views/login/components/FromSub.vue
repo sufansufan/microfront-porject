@@ -17,7 +17,9 @@
             <img src="../../../assets/login/login_password_icon.png" alt="">
           </div>
           <div>
-            <el-input v-model.trim="ruleForm.password" type="password" :show-password="true" placeholder="密码" style="width: 290px" />
+            <el-input v-model.trim="ruleForm.password" :type="passwordState ? 'password' : ''" placeholder="请输入密码" style="width: 290px">
+              <i slot="suffix" class="iconfont password" :class="passwordState ? 'icon-yincang1' : 'icon-xianshi1'" @click="passwordState = !passwordState" />
+            </el-input>
           </div>
         </div>
       </el-form-item>
@@ -34,8 +36,8 @@
           </div>
         </div>
       </el-form-item>
-      <el-form-item prop="code">
-        <el-button type="primary" size="medium" class="code-btn" @click="submit">登 录</el-button>
+      <el-form-item>
+        <el-button type="primary" size="medium" class="code-btn" :loading="loading" @click="submit">登 录</el-button>
       </el-form-item>
       <el-form-item>
         <div class="remember">
@@ -70,7 +72,9 @@ export default {
         password: '',
         code: ''
       },
+      loading: false,
       remember: false,
+      passwordState: true,
       rules: {
         username: [
           { required: true, message: '请输入用户名', trigger: 'blur' }
@@ -84,17 +88,50 @@ export default {
       }
     }
   },
+  mounted() {
+    window.addEventListener('keydown', this.keyDown)
+  },
+  destroyed() {
+    window.removeEventListener('keydown', this.keyDown, false)
+  },
   methods: {
+    keyDown(e) {
+      if (e.keyCode === 13) {
+        if (this.loading) return false
+        this.submit()
+      }
+    },
     submit() {
-      const userInfo = JSON.parse(JSON.stringify(this.ruleForm))
-      delete userInfo.code
-      this.$store.dispatch('login', userInfo).then(res => {
-        this.$router.replace({
-          path: '/home',
-          query: {
-            redirect: this.$router.currentRoute.fullPath
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          const userInfo = JSON.parse(JSON.stringify(this.ruleForm))
+          delete userInfo.code
+          if (this.ruleForm.code !== this.$refs.codeImg.$data.verifyCode) {
+            this.$message({
+              message: '验证码不正确',
+              showClose: true,
+              type: 'warning',
+              duration: 1500,
+              customClass: 'login-message'
+            })
+            this.loading = false
+            return
           }
-        })
+          this.$store.dispatch('login', userInfo).then(res => {
+            this.loading = false
+            this.$router.replace({
+              path: '/home',
+              query: {
+                redirect: this.$router.currentRoute.fullPath
+              }
+            })
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          return false
+        }
       })
     }
   }
@@ -155,6 +192,11 @@ export default {
         }
       }
     }
+  }
+  .password {
+    font-size: 16px;
+    line-height: 38px;
+    cursor: pointer;
   }
 }
 </style>

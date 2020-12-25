@@ -28,7 +28,7 @@ export default {
   },
   props: {
     width: {
-      default: '70%',
+      default: '50%',
       type: String
     },
     height: {
@@ -40,7 +40,7 @@ export default {
       type: String
     },
     top: {
-      default: '15vh',
+      default: '28vh',
       type: String
     },
     modal: {
@@ -50,12 +50,27 @@ export default {
     append: {
       default: false,
       type: Boolean
+    },
+    isShow: {
+      default: false,
+      type: Boolean
     }
   },
   data() {
     return {
       oTitle: '',
-      show: false
+      refShow: false
+    }
+  },
+  computed: {
+    show: {
+      get() {
+        return this.isShow || this.refShow
+      },
+      set(val) {
+        this.refShow = val
+        this.$emit('update:isShow', val)
+      }
     }
   },
   watch: {
@@ -93,7 +108,7 @@ export default {
     }
   }
   .el-dialog__body {
-    padding: 20px;
+    padding: 10px;
     // .btn {
     //   width: 100%;
     //   margin: 10px 0 0 0 !important;
@@ -105,6 +120,7 @@ export default {
     .footer {
       display: flex !important;
       justify-content: flex-end;
+      margin-top: 10px;
     }
   }
 }

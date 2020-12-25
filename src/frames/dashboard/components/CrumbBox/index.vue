@@ -1,12 +1,17 @@
 <template>
-  <div class="crumb-box">
+  <div class="crumb-box" :style="{'background': bgColor}">
     <slot />
   </div>
 </template>
 
 <script>
 export default {
-
+  props: {
+    bgColor: {
+      default: '#f7f4f8',
+      type: String
+    }
+  }
 }
 </script>
 

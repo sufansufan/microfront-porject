@@ -1,0 +1,36 @@
+.rule-form-flex {
+  display: flex;
+  flex-wrap: wrap;
+  &.four-width {
+    & > .el-form-item {
+      width: 25%;
+    }
+  }
+  &.one-half {
+    & > .el-form-item {
+      width: 50%;
+    }
+  }
+  & > .el-form-item {
+    width: 33.33%;
+  }
+  .el-select, .el-input, .el-cascader {
+    width: 100%;
+  }
+  .one-width {
+    width: 100% !important;
+  }
+  .two-width {
+    width: 66.66% !important;
+  }
+  .one-half {
+    width: 50% !important;
+  }
+
+}
+.rule-form-btn-box {
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}

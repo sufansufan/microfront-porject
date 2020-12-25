@@ -12,11 +12,13 @@
           prop="date"
           label="考勤时间"
           header-align="center"
+          width="160"
         />
         <el-table-column
           prop="date"
           label="打卡时间"
           header-align="center"
+          width="160"
         />
         <el-table-column
           prop="result"
@@ -28,13 +30,13 @@
           prop="name"
           label="打卡地址"
           header-align="center"
-          width="100"
+          width="320"
         />
         <el-table-column
           prop="name"
           label="备注"
           header-align="center"
-          width="100"
+          width="320"
         />
         <el-table-column
           prop="operation"

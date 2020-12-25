@@ -4,9 +4,9 @@
     <breadcrumb />
     <transition name="fade-transform" mode="out-in">
       <template>
-        <!-- <keep-alive :exclude="['LaborDetails', 'PostInfo', 'EmployeeInfo']"> -->
-        <router-view :key="key" />
-        <!-- </keep-alive> -->
+        <keep-alive :include="keepAliveInclude">
+          <router-view :key="key" />
+        </keep-alive>
       </template>
     </transition>
   </div>
@@ -15,21 +15,27 @@
 <script>
 import TopNav from './components/TopNav'
 import Breadcrumb from './components/Breadcrumb'
+// import { initPuzzles } from '@core/structureModule'
 // import { mapGetters } from 'vuex'
+import keepAlive from '@core/mixins/keepAlive'
 export default {
   name: 'Index',
   components: {
     TopNav,
     Breadcrumb
   },
+  mixins: [keepAlive],
+
   computed: {
     // ...mapGetters(['tabs'])
     key() {
       return this.$route.path
     }
   },
-  mounted() {
-    // console.log(this.tabs, 7777)
+  created() {
+    // initPuzzles()
+  },
+  methods: {
   }
 }
 </script>

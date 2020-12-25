@@ -10,13 +10,14 @@
         <el-table-column
           type="index"
           label="序号"
-          width="50"
+          width="48"
           header-align="center"
         />
         <el-table-column
           prop="date"
           label="打卡时间"
           header-align="center"
+          width="160"
         />
         <el-table-column
           prop="name"
@@ -29,7 +30,7 @@
       <el-pagination
         v-show="count"
         :page-sizes="pageSizes"
-        :page-size="limit"
+        :page-size="size"
         :total="count"
         :current-page="page"
         :layout="pageLayout"
@@ -110,7 +111,6 @@ export default {
   },
   methods: {
     taskJump(val) {
-      console.log('123' + JSON.stringify(val))
       // const a = val
       if (val.taskType === 'PatchCard') {
         this.$router.push({ path: '/patchrecord' })

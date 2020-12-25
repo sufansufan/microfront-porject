@@ -10,7 +10,8 @@
     "core": "webpack --hide-modules --config config/webpack.build.core.js",
     "frame": "webpack --hide-modules --config config/webpack.build.frame.js",
     "puzzle": "webpack --hide-modules --config config/webpack.build.puzzle.js",
-    "analyz": "cross-env NODE_ENV=production npm_config_report=true npm run build"
+    "analyz": "cross-env NODE_ENV=production npm_config_report=true npm run build",
+    "commit": "git cz"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.5",
@@ -19,18 +20,28 @@
     "dll": "^0.2.0",
     "element-ui": "^2.13.0",
     "js-cookie": "^2.2.1",
+    "jsrsasign": "^9.1.9",
     "loadjs": "^3.6.1",
     "minireset.css": "0.0.5",
     "moment": "^2.24.0",
     "nprogress": "^0.2.0",
+    "sql-formatter": "^2.3.3",
+    "tinymce": "^5.4.1",
+    "v-fit-columns": "^0.1.1",
+    "v-viewer": "^1.5.1",
     "vue": "^2.6.10",
+    "vue-codemirror": "^4.0.6",
+    "vue-cropper": "^0.5.2",
+    "vue-jsonp": "^0.1.8",
     "vue-router": "^3.0.6",
     "vue-splitpane": "^1.0.6",
+    "vuedraggable": "^2.23.2",
     "vuex": "^3.1.1",
     "webpack-bundle-analyzer": "^3.6.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.4",
@@ -60,6 +71,7 @@
     "webpack": "^4.32.0",
     "webpack-cli": "^3.3.2",
     "webpack-dev-server": "^3.4.1",
-    "webpack-merge": "^4.2.1"
+    "webpack-merge": "^4.2.1",
+    "yaml-loader": "^0.6.0"
   }
 }

@@ -1,29 +1,26 @@
 <template>
   <div class="message-notify">
-    <el-tabs type="border-card">
-      <el-tab-pane>
+    <el-tabs v-model="activeName" type="border-card" @tab-click="handleClick">
+      <el-tab-pane name="first">
         <span slot="label" class="tab-box">
-          <el-badge :value="userNotitySize" :hidden="userNotitySize === 0"><i class="sys-msg-icon" /></el-badge>
-          <div class="message-img" />
-          系统消息
+          <el-badge :value="mesNotitySize" :hidden="mesNotitySize === 0 ||tableData.length===0"><i class="sys-msg-icon" /></el-badge>
+          <div class="message-img" />系统消息
         </span>
         <div
-          v-for="(item, index) in dataList"
+          v-for="(item, index) in tableData"
           :key="index"
+          v-loading="loading"
           class="content"
-        >{{ item.text }}</div>
-        <div class="more" @click="viewmore()">
-          <div>
-            查看更多
-          </div>
-          <div />
+        >
+          <span class="message" @click="updateDetails(item)">{{ item.title }}</span>
+          <span class="mes-time">{{ fnTime(item.createDate) }}</span>
         </div>
+        <div class="see-more" @click="$router.push({ path: 'MoreNotify' })">查看更多</div>
       </el-tab-pane>
-      <el-tab-pane label="配置管理">
+      <el-tab-pane name="second">
         <span slot="label">
           <el-badge :value="userNotitySize" :hidden="userNotitySize === 0"><i class="sys-msg-icon" /></el-badge>
-          <div class="task-img" />
-          日常任务
+          <div class="task-img" />日常任务
         </span>
         <div class="task">
           <div class="task-time">
@@ -35,14 +32,16 @@
               v-model="value"
               type="date"
               placeholder="选择日期"
+              @change="changeTime"
             />
             <span
               class="icon"
+              :disabled="disabled"
               @click="afterTime()"
             ><img src="../../../assets/messagenotify/right.png"></span>
           </div>
           <div v-for="(item,index) in taskList" :key="index" class="task-content">
-            <p class="task-text"><a class="task-o">{{ item.title }}（{{ item.complete }}/{{ item.all }}）</a><a class="task-status" @click="gonotify()"><img src="../../../assets/messagenotify/go.png"></a></p>
+            <p class="task-text"><a class="task-o">{{ item.title }}（{{ item.complete }}/{{ item.all }}）</a><a class="task-status" @click="gonotify(item)"><img src="../../../assets/messagenotify/go.png"></a></p>
             <!-- <p class="task-text"><a class="task-t">日志填写（0/10）</a><a class="task-status" @click="finishnotify()">已完成</a></p> -->
           </div>
         </div>
@@ -53,25 +52,118 @@
 
 <script>
 import { getDailytasksDate } from '@core/api/dailyTasksConfig'
+import { getList } from '@core/api/emergencyWork'
+import { parseTime } from '@core/utils'
+import { dealByServiceId } from '@core/api/emergencyWork'
+import { setSessionStorage, getSessionStorage } from '@core/utils/auth'
 export default {
   data() {
     return {
-      userNotitySize: 10,
+      mesNotitySize: '',
+      userNotitySize: '',
       value: '',
-      dataList: [
-        { text: '还有10分钟就要上班了, ..(12.21)' },
-        { text: '还有10分钟就要上班了, ..(12.21)' },
-        { text: '还有10分钟就要上班了, ..(12.21)' }
-      ],
-      taskList: []
+      taskList: [],
+      tableData: [],
+      activeName: getSessionStorage('systemInfo') || 'second',
+      createDate: '',
+      disabled: false,
+      loading: true
     }
   },
   created() {
     this.value = new Date()
     this.fetchData(this.value)
+    this.MesfetchData()
   },
   mounted() {},
   methods: {
+    handleClick(tab) {
+      setSessionStorage('systemInfo', tab.name)
+    },
+    updateDetails(item) {
+      console.log(item)
+      const { route, code } = item.emergencyworkTypeDTO
+      const taskTypeId = item.emergencyworkTypeDTO.id
+      const { serviceId, id, type } = item
+      // 通用系统消息
+      if (route === '/publicSystemMessage') {
+        const { createDate, title } = item
+        const { taskType } = item.emergencyworkTypeDTO
+        const query = {
+          messageType: taskType,
+          date: createDate,
+          content: title
+        }
+        this.$router.push({ path: route, query })
+        this.handlerSysTemComplete(serviceId, taskTypeId)
+        return
+      }
+      // 合作企业
+      if (route === '/cooperativeEnterprise/materialSupply/enterpriseView') {
+        this.handlerSysTemComplete(serviceId, taskTypeId)
+        return
+      }
+
+      // 组织管理
+      setTimeout(() => {
+        if (route.includes('employeeInfo')) {
+          this.$router.push({ path: route, query: { type: 'edit', id: serviceId, contractInfo: 'contractInfo' }})
+        } else {
+          this.$router.push({ path: route, query: { serviceId: serviceId, id: id, code: code, type: type }})
+        }
+      }, 0)
+    },
+    MesfetchData() {
+      this.loading = true
+      const params = {
+        type: 1,
+        userId: '1',
+        deal: false
+      }
+      getList(params).then(({ data: { content }}) => {
+        this.loading = false
+        this.tableData = content || []
+        if (this.tableData.length > 0 && this.tableData.length <= 999) {
+          this.mesNotitySize = this.tableData.length
+        } else {
+          this.mesNotitySize = '····'
+        }
+      })
+    },
+    fnTime(time) {
+      const now = new Date().getTime()
+      const ptime = new Date(time).getTime()
+      const twentyFourHours = 24 * 60 * 60 * 1000
+      const fortyEightHours = 24 * 60 * 60 * 1000 * 2
+      const yaerHours = 24 * 60 * 60 * 1000 * 365
+      const date = new Date()
+      const year = date.getFullYear()
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      const today = `${year}-${month}-${day}`
+      const todayTime = new Date(today).getTime()
+      const yesterdayTime = new Date(todayTime - twentyFourHours).getTime()
+      const lastYesterdayTime = new Date(todayTime - fortyEightHours).getTime()
+      const lastYear = new Date(todayTime - yaerHours).getTime()
+      const tenTimes = new Date(10 * 60 * 1000).getTime()
+      const timeDifference = now - ptime
+      if (timeDifference < tenTimes) {
+        return '刚刚'
+      } else if (ptime >= todayTime) {
+        return time.split(' ')[1].substr(0, 5)
+      } else if (ptime < todayTime && yesterdayTime <= ptime) {
+        return '昨天 ' + time.split(' ')[1].substr(0, 5)
+      } else if (ptime < yesterdayTime && lastYesterdayTime <= ptime) {
+        return '前天 ' + time.split(' ')[1].substr(0, 5)
+      } else if (ptime < lastYesterdayTime && lastYear <= ptime) {
+        const timearr = time.replace(' ', ':').replace(/\:/g, '-').split('-')
+        return '' + timearr[1].split('')[1] + '月' + timearr[2] + '日\t' + timearr[3] + ':' + timearr[4] + ''
+      } else {
+        const timearr = time.replace(' ', ':').replace(/\:/g, '-').split('-')
+        return '' + timearr[0] + '年' + timearr[1].split('')[1] + '月' + timearr[2] + '日\t' + timearr[3] + ':' + timearr[4] + ''
+      }
+    },
+
     beforeTime() {
       this.value = new Date(this.value.setDate(this.value.getDate() - 1))
       this.fetchData(this.value)
@@ -80,22 +172,26 @@ export default {
       this.value = new Date(this.value.setDate(this.value.getDate() + 1))
       this.fetchData(this.value)
     },
-    viewmore() {
-      this.$router.push({ path: 'MoreNotify' })
+    gonotify(data) {
+      this.$router.push({ path: data.route, query: { type: data.complete === data.all ? 'second' : 'first' }})
     },
-    gonotify() {
-      this.$router.push({ path: 'GoNotify' })
-    },
+
     finishnotify() {
       this.$router.push({ path: 'finishnotify' })
     },
+    changeTime(val) {
+      this.fetchData(this.value)
+    },
     fetchData(value) {
       const params = {
-        // date: '2020-02-06'
-        date: value
+        date: parseTime(value, 'y-m-d') ? '' : ''
       }
       getDailytasksDate(params).then(({ data }) => {
         this.taskList = data
+      })
+    },
+    handlerSysTemComplete(serviceId, taskTypeId) {
+      dealByServiceId(serviceId, taskTypeId).then(res => {
       })
     }
 
@@ -110,11 +206,29 @@ export default {
   margin-top: 10px;
   background: #003c74;
   .content {
+    display: flex;
+    justify-content: space-between;
+     cursor: pointer;
+      line-height: 16px;
+      padding: 10px 0;
+      font-size: 12px;
+    .message{
+      display:block;
+      width: 170px;
+      color: #fff;
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+  }
+  .see-more{
     cursor: pointer;
-    line-height: 14px;
-    padding: 10px 0;
-    font-size: 14px;
-    color: #fff;
+    font-size:14px;
+    color:#fff;
+    padding-right: 15px;
+     float:right;
+    background: url('../../../assets/home/more-white.png') no-repeat center right;
+
   }
   .more {
     padding: 10px 0;
@@ -124,6 +238,7 @@ export default {
     color: #fff;
     display: flex;
     justify-content: flex-end;
+
     & > div {
       &:last-child {
         width: 14px;
@@ -241,7 +356,8 @@ export default {
   .el-tabs--border-card > .el-tabs__content {
     background: #003c74;
     color: #fff;
-    height: 100%;
+    height:400px;
+    overflow-y: auto;
   }
 
   .el-date-editor.el-input {

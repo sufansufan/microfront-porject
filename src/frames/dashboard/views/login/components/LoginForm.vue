@@ -1,13 +1,17 @@
 <template>
   <div class="login-form">
     <ul>
-      <li><span
-        :class="[btnActive === false ? 'active' : '']"
-        @click="change(btnActive)"
-      >扫码登录</span></li>
+      <li>
+        <span
+          :class="[btnActive === false ? 'active' : '']"
+          @click="change(true)"
+        >
+          扫码登录
+        </span>
+      </li>
       <b class="xian" />
       <li>
-        <span :class="[btnActive === true ? 'active' : '']" @click="change(btnActive)">账户登陆</span>
+        <span :class="[btnActive === true ? 'active' : '']" @click="change(false)">账户登录</span>
       </li>
     </ul>
     <div class="tab">
@@ -26,15 +30,22 @@
           alt=""
         >
       </div>
-      <div class="tan-admin">欢迎使用金斗云智能管理平台</div>
+      <div class="tan-admin">欢迎使用{{ titleName }}</div>
     </div>
   </div>
 </template>
 <script>
 import QrCode from './QrCode.vue'
 import FromSub from './FromSub.vue'
+import { judgeTitle } from '@core/utils'
 export default {
   components: { QrCode, FromSub },
+  props: {
+    companyInfo: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       btnActive: true,
@@ -49,6 +60,11 @@ export default {
       verifyCode: '',
       error: '',
       loginVerifyCode: false // 验证码发送后台
+    }
+  },
+  computed: {
+    titleName() {
+      return judgeTitle(this.companyInfo)
     }
   },
   watch: {
@@ -73,6 +89,9 @@ export default {
   background: rgba(239, 250, 255, 1);
   border-radius: 10px;
   position: relative;
+  position: absolute;
+  top: 10vh;
+  right: 10%;
   .show {
     display: block;
   }
@@ -116,6 +135,9 @@ export default {
         text-align: center;
         display: inline-block;
         cursor: pointer;
+        &:hover {
+          color: rgba(10, 76, 138, 1);
+        }
       }
       .active {
         color: rgba(10, 76, 138, 1);

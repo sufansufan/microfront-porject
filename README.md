@@ -9,7 +9,7 @@ platform 框架介绍 是基于 Vue 和 Webpack4 实现的一种项目结构；�
 - 支持生产环境模块热插拔
 - 底层为项目的核心提供保障(core)
 - 基座作为基座模块，也支持多个并存(frames)
-- 业务模块的灵活组合(modules)
+- 业务模块的灵活组合(puzzles)
 
 ## 如何建立关联
 - 将基座和业务模块以`umd`模块的方式用 `webpack` 打包出来
@@ -22,8 +22,11 @@ platform 框架介绍 是基于 Vue 和 Webpack4 实现的一种项目结构；�
 
 请拉取dev -> dev-bj
 
+~~~
+git clone https://gitlab.zgjdy.cn/jdy-frontend/platform.git
+~~~
 
-**建立modules文件夹**
+**建立puzzles文件夹**
 
 项目拉取完成以后在您可以看到`src` 下面的项目结构是这样的
 
@@ -90,13 +93,13 @@ platform 框架介绍 是基于 Vue 和 Webpack4 实现的一种项目结构；�
 │          │  └─components
 │          └─page
 │              └─components
-└─modules（此文件文件夹不存在，此时需要在src下面建立modules文件夹）
+└─puzzles（此文件文件夹不存在，此时需要在src下面建立puzzles文件夹）
 
 ~~~
 
 **拉取业务模块**
 
-如果需要进行业务模块的拉取，把所有的业务模块拉取到modules文件下面 例如：组织架构和系统管理
+如果需要进行业务模块的拉取，把所有的业务模块拉取到puzzles文件下面 例如：组织架构和系统管理
 
 ~~~
 git clone https://gitlab.zgjdy.cn/jdy-frontend/systemmanage.git
@@ -105,7 +108,7 @@ git clone https://gitlab.zgjdy.cn/jdy-frontend/orgstructure.git
 
 **注意事项**
 
-git地址项目的文件小写命名的`systemmanage.git`  在modules中是以驼峰名称的文件结构， 即和GitLab中仓库的名字保持一致
+git地址项目的文件小写命名的`systemmanage.git`  在puzzles中是以驼峰名称的文件结构， 即和GitLab中仓库的名字保持一致
 
 **完整的项目结构展示**
 
@@ -174,7 +177,7 @@ git地址项目的文件小写命名的`systemmanage.git`  在modules中是以�
 │          │  └─components
 │          └─page
 │              └─components
-└─modules
+└─puzzles
     ├─orgStructure
     │  ├─scripts
     │  └─views
@@ -336,7 +339,7 @@ index.html：HTML 模版
 │          │  └─components
 │          └─page
 │              └─components
-└─modules				    		      // 子模块
+└─puzzles				    		      // 子模块
     └─systemManage					  	  // 系统管理模块
         ├─scripts 						  // 子模块的动态路由
         └─views
@@ -429,3 +432,91 @@ index.html：HTML 模版
     "files.autoSave": "off",
 }
 ~~~
+
+## 选项卡组件
+~~~
+<el-tabs v-model="activeName" type="card" class="one-card-tabs is-padding">
+    <el-tab-pane label="用户管理" name="first" />
+    <el-tab-pane label="配置管理" name="second" />
+    <el-tab-pane label="角色管理" name="third" />
+    <el-tab-pane label="定时任务补偿" name="fourth" />
+    <el-tab-pane name="last">
+        <span slot="label"><i class="iconfont icon-fanhui-copy" /> 返回</span>
+    </el-tab-pane>
+    </el-tabs>
+    <el-tabs v-model="activeName" type="card" class="two-card-tabs is-padding">
+    <el-tab-pane label="用户管理" name="first" />
+    <el-tab-pane label="配置管理" name="second" />
+    <el-tab-pane label="角色管理" name="third" />
+    <el-tab-pane label="定时任务补偿" name="fourth" />
+    </el-tabs>
+    <el-tabs v-model="activeName" type="card" class="three-card-tabs is-padding">
+    <el-tab-pane label="用户管理" name="first" />
+    <el-tab-pane label="配置管理" name="second" />
+    <el-tab-pane label="角色管理" name="third" />
+    <el-tab-pane label="定时任务补偿" name="fourth" />
+    </el-tabs>
+    <el-tabs v-model="activeName" class="nomal first-margin is-padding">
+    <el-tab-pane label="用户管理" name="first" />
+    <el-tab-pane label="配置管理" name="second" />
+    <el-tab-pane label="角色管理" name="third" />
+    <el-tab-pane label="定时任务补偿" name="fourth" />
+</el-tabs>
+~~~
+
+## tooltip用法
+~~~
+<el-tooltip effect="dark" placement="top-start">
+    <div slot="content" class="tooltip-font"> 这hi噢黑哦然后问我偶尔howIE然后问IE然后我维护日文化融文化融我和肉人家文化人叫我和融合</div>
+    <el-button type="primary">修改</el-button>
+</el-tooltip>
+~~~
+
+## searchBar用法
+~~~
+
+~~~
+
+## 权限点命名规范
+**例：资源名称:操作类型  resource:add**
+查询			query
+新增			add
+修改			edit
+删除		    delete
+复制            copy
+导出脚本		export
+导入            import
+切换数据类型	change
+自定义配置		config
+恢复默认配置	reset
+任务类型维护	type
+默认配置		default
+划分区域        divideArea
+分配            distribute
+下架            down
+新增设备         addEquip
+入库            warehouse
+确认           confirm
+发货           goods
+开票           invoice
+关闭           close
+发布            release
+停止            stop
+调整            adjust
+维护            maintain
+授权            power
+设置            setting
+版本            edition
+结算            settle
+撤销            revoke
+取消            cancel
+审批            approve
+退出            out
+清空            empty
+安全协议        safeAgree
+三级安全教育     safeEducation
+安全技术交底     disclose
+下载            download
+上传            upload
+## 文件上传的类型
+资源管理        resource

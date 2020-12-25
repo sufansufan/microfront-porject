@@ -5,7 +5,7 @@ const baseUrl = '/token'
 export const getToken = (data) => (
   request({
     url: baseUrl + '/login',
-    method: 'get',
-    params: data
+    method: 'post',
+    data
   })
 )

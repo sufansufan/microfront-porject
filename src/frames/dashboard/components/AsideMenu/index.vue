@@ -1,10 +1,10 @@
 <template>
   <div class="aside-menu">
     <el-menu
-      :default-active="menuData.length && menuData[0].id"
+      :default-active="menuId"
       class="el-menu-vertical-demo"
       background-color="#eeeeee"
-      text-color="#000"
+      text-color="#333333"
       active-text-color="#fff"
       @open="handleOpen"
       @close="handleClose"
@@ -25,36 +25,30 @@ export default {
       type: Array,
       default: () => [
         {
-          name: '系统管理',
-          icon: 'el-icon-menu',
-          url: '',
-          id: '1'
-        },
-        {
-          name: '组织架构',
-          icon: 'el-icon-menu',
-          url: '',
-          id: '2'
-        },
-        {
-          name: '考勤管理',
-          icon: 'el-icon-menu',
-          url: '',
-          id: '3'
-        },
-        {
-          name: '日志管理',
-          icon: 'el-icon-menu',
-          url: '',
-          id: '4'
+          id: ''
         }
       ]
+    },
+    menuId: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
-
     }
+  },
+  computed: {
+    defaultActive() {
+      if (this.menuData.length) {
+        return this.menuData
+      } else {
+        return [{ id: '' }]
+      }
+    }
+  },
+  created() {
+
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -79,5 +73,6 @@ export default {
     height: 40px;
     line-height: 40px;
   }
+
 }
 </style>

@@ -35,3 +35,23 @@ const promptList = [
     }
   }
 ];
+
+(async function() {
+  // 选择打包内容
+  const answers = await inquirer.prompt(promptList)
+  console.log(answers) // 返回的结果
+
+  // 打包核心
+  console.log('\n--------------- BUILD CORE ---------------')
+  await webpackPromise(_core)
+
+  // 打包架构
+  console.log('\n--------------- BUILD FRAMES ---------------')
+  for (const item of answers.frames) { await webpackPromise(_common('frames', item)) }
+
+  // 打包模块
+  console.log('\n--------------- BUILD PUZZLES ---------------')
+  for (const item of answers.puzzles) { await webpackPromise(_common('puzzles', item)) }
+})().then(() => {
+  console.log('\n--------------- ALL DONE ---------------\n')
+})

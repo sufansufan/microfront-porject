@@ -46,7 +46,6 @@ export default {
   watch: {
     verifyCode() {
       // const aa = this.verifyCode
-      // debugger
     }
   },
   mounted() {},

@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
+import { getProdTwoName } from '@core/utils'
 
-const TokenKey = 'Admin-Token'
+const TokenKey = getProdTwoName() + '-Token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -24,4 +25,16 @@ export function setLocalStorage(name, value) {
 
 export function removeLocalStorage(name) {
   return localStorage.removeItem(name)
+}
+
+export function getSessionStorage(name) {
+  return sessionStorage.getItem(name)
+}
+
+export function setSessionStorage(name, value) {
+  return sessionStorage.setItem(name, value)
+}
+
+export function removeSessionStorage(name) {
+  return sessionStorage.removeItem(name)
 }

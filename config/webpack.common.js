@@ -19,7 +19,9 @@ module.exports = {
       '@': resolve('src'),
       '@core': resolve('src/core'),
       '@frames': resolve('src/frames'),
-      '@puzzles': resolve('src/puzzles')
+      '@framesDash': resolve('src/frames/dashboard'),
+      '@puzzles': resolve('src/puzzles'),
+      '@puzzlesDash': resolve('src/frames/dashboard/views/puzzles')
     }
   },
   module: {
@@ -48,7 +50,10 @@ module.exports = {
             loader: 'sass-resources-loader',
             options: {
               sourceMap: true,
-              resources: path.resolve(__dirname, '../src/core/styles/var.less')
+              resources: [
+                path.resolve(__dirname, '../src/core/styles/var.less'),
+                path.resolve(__dirname, '../src/core/styles/mixins.less')
+              ]
             }
           }
         ]
@@ -73,6 +78,19 @@ module.exports = {
             options: { outputPath: 'font' }
           }
         ]
+      },
+      {
+        test: /Dockerfile/,
+        use: [
+          {
+            loader: 'file-loader'
+          }
+        ]
+      },
+      {
+        test: /\.ya?ml$/,
+        type: 'json',
+        use: 'yaml-loader'
       }
     ]
   },
@@ -85,5 +103,18 @@ module.exports = {
     new webpack.DllReferencePlugin({
       manifest: require('../static/dll/puzzle.manifest.json')
     })
+    // new BundleAnalyzerPlugin()
+    // new BundleAnalyzerPlugin({
+    //   analyzerMode: 'server',
+    //   analyzerHost: 'localhost',
+    //   analyzerPort: 8888, // 运行后的端口号
+    //   reportFilename: 'report.html',
+    //   defaultSizes: 'parsed',
+    //   openAnalyzer: true,
+    //   generateStatsFile: false,
+    //   statsFilename: 'stats.json',
+    //   statsOptions: null,
+    //   logLevel: 'info'
+    // })
   ]
 }

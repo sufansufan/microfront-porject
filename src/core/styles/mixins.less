@@ -1,0 +1,57 @@
+// form mixins
+// 33 66 100
+.rule-form-wapper(@label: 0; ) {
+  display: flex;
+  flex-wrap: wrap;
+  @labelWidth: @label * 1px / 2;
+
+  .loop(@n, @i: 33.3) when (@i =< @n) {
+    @name: floor(@i);
+
+    .form-item--100 when (@name =99) {
+      width: 100%;
+
+      .half {
+        @percent: 50%;
+        width: calc(@percent - @labelWidth ) !important;
+      }
+
+      .el-select {
+        width: 100%;
+      }
+
+      .el-cascader {
+        width: 100%;
+      }
+
+      .el-date-editor {
+        width: 100%;
+      }
+    }
+
+    .form-item--@{name} when (@name < 99) {
+      width: @i * 1%;
+
+      .half {
+        @percent: 50%;
+        width: calc(@percent - @labelWidth ) !important;
+      }
+
+      .el-select {
+        width: 100%;
+      }
+
+      .el-cascader {
+        width: 100%;
+      }
+
+      .el-date-editor {
+        width: 100%;
+      }
+    }
+
+    .loop(@n, (@i + 33.3));
+  }
+
+  .loop(100);
+}

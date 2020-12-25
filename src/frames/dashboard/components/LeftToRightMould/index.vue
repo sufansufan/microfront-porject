@@ -21,13 +21,13 @@ export default {
   & > .left {
     width: 200px;
     min-height: calc(100vh - 120px);
-    background: #eeeeee;
+    background: #f5f5f5;
   }
   & > .right {
     width: calc(100% - 200px);
-    height: calc(100vh - 120px);
+    height: calc(100vh - 118px);
     overflow-y: auto;
-    padding: 20px;
+    padding: 10px;
   }
 }
 </style>

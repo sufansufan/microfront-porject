@@ -22,10 +22,10 @@ module.exports = merge(common, {
   },
   devtool: 'inline-source-map',
   devServer: {
-    host: '',
+    host: 'localhost',
     // 热重载
     hot: true,
-    port: '',
+    port: process.env.port || port,
     // 错误显示在页面中
     overlay: true,
     // 信息打印
@@ -65,5 +65,17 @@ module.exports = merge(common, {
         to: 'favicon.ico'
       }
     ]),
+    new FriendlyErrorsWebpackPlugin({
+      compilationSuccessInfo: {
+        messages: [
+          'App running at:',
+          `Local:            http://localhost:${process.env.port || port}`,
+          `On Your Network:  http://${getNetworkIp()}:${process.env.port || port}`,
+          ''
+        ],
+        clearConsole: true
+      }
+    }
+    )
   ]
 })

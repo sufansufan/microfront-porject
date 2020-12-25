@@ -1,36 +1,56 @@
 .search {
+  width: 100%;
   & > .select {
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     & > div {
+      width: 23.4%;
       display: flex;
-      margin-right: 20px;
-      margin-bottom: 10px;
+      margin-right: 2px;
+      margin-bottom: 5px;
       line-height: 30px;
       & > span {
-        min-width: 60px;
-        margin-right: 10px;
-        line-height: 30px;
+        min-width: 120px;
+        padding-right: 10px;
+        line-height: 32px;
         text-align: right;
+        background: #eee;
       }
       .step-span {
-        margin-left: 10px;
+        margin: 0px 5px;
         min-width: 0px;
+        background: #fff;
       }
       &:last-child {
         margin-right: 0px;
+      }
+      & > div {
+        width: 100%;
+      }
+      .el-select, .el-input, .el-date-editor--daterange.el-input__inner, .el-cascader--small {
+        width: 100%;
+      }
+      &.query {
+        width: 80px;
       }
     }
   }
   & > .btn {
     display: flex;
     & > div {
-      margin-right: 10px;
+      margin-right: 4px;
       margin-bottom: 10px;
+      height: auto;
+    }
+    .el-button-group{
+      margin-right:6px;
+    }
+    .btn-text{
+      margin-left: auto;
     }
   }
   .space {
     margin-left: 3px;
   }
-
 }

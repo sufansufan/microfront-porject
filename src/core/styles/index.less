@@ -4,10 +4,21 @@
 @import './upload.less';
 @import './ellipsis.less';
 @import './transition.less';
+@import './tinymce.less';
+@import './form.less';
+
+
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  fill: currentColor;
+  overflow: hidden;
+}
 
 .borderAndBackColor {
-  background-color: @primary ;
-  border-color: @primary ;
+  background-color: @primary !important;
+  border-color: @primary !important;
 }
 
 .disabled {
@@ -18,25 +29,93 @@
 // button
 .el-button--primary {
   .borderAndBackColor;
-  &:hover,
   &:active,
   &:focus {
-    .borderAndBackColor;
+    .borderAndBackColor
   }
-  color: #fff;
+  &:hover {
+    background-color:  @primaryBtnHover !important;
+    border-color: @primaryBtnHover !important;
+  }
+  color: @primaryColor;
+  &.is-disabled {
+    color: @primaryDisabledColor;
+    border-color: @primaryDisabledBorder !important;
+    background-color: @primaryDisabled !important;
+    &:hover {
+      color: @primaryDisabledColor;
+      border-color: @primaryDisabledBorder !important;
+      background-color: @primaryDisabled !important;
+    }
+  }
 }
 
 // button default
 .el-button--default {
   border-color: @primary;
-  color: @primary;
-  &:hover,
-  &:active,
-  &:focus {
-    background: #fff;
-    border-color: @primary;
-    color: @primary;
+  color: @primary ;
+  &:active, &:focus {
+    background: @defaultBtnActive;
+    border-color: @defaultBtnActive;
+    color: @defaultBtnActiveColor;
   }
+  &:hover {
+    background: @defaultBtnHover;
+    border-color: @defaultBtnHover;
+    color: @defaultBtnHoverColor;
+  }
+}
+
+.back-btn {
+  border-color: #DDDDDD !important;
+  background: #DDDDDD !important;
+  color: @primary !important;
+  &:hover {
+    background: #ededed !important;
+    border-color: #ededed !important;
+    color: @primary !important;
+  }
+  &:active, &:focus {
+    background: #ddd !important;
+    border-color: #ddd !important;
+    color:  @primary !important;
+  }
+}
+
+.cancel-btn {
+  border-color: #666 !important;
+  background: #fff !important;
+  color: #666 !important;
+  &:hover {
+    background: #fff !important;
+    border-color: @primary !important;
+    color: @primary !important;
+  }
+  &:active, &:focus {
+    background: #fff !important;
+    border-color: #666 !important;
+    color:#666 !important;
+  }
+}
+
+
+//  消息提醒的第二个按钮
+.el-message-box__btns button:nth-child(2) {
+  background-color:  @primary;
+  color: #fff;
+}
+
+.el-button-group .el-button--primary:not(:first-child):not(:last-child) {
+  border-left-color: rgba(255, 255, 255, .5) !important;
+  border-right-color: rgba(255, 255, 255, .5) !important;
+}
+
+.el-button-group .el-button--primary:first-child {
+  border-right-color: rgba(255, 255, 255, .5) !important;
+}
+
+.el-button-group .el-button--primary:last-child {
+  border-left-color:  rgba(255, 255, 255, .5) !important
 }
 
 // table
@@ -55,6 +134,8 @@
 .el-table thead tr {
   background-color: #e7e9ec;
   color: #333;
+  padding: 0px;
+  line-height: 34px;
 }
 
 .el-table--border,
@@ -77,6 +158,10 @@
   border-right: 1px solid #797979;
 }
 
+.el-table--enable-row-hover .el-table__body tr:hover > td {
+  background-color: #ecf5ff;
+}
+
 // table sortTable
 .el-table .descending .sort-caret.descending {
   border-top-color: @primary;
@@ -88,9 +173,20 @@
 
 // table color
 .table-click-color {
-  color: @primary !important;
+  color: @primary ;
   cursor: pointer;
-  text-decoration: underline;
+  // text-decoration: underline;
+}
+
+.el-table-column--selection .cell {
+  padding: 0px 12px !important;
+}
+
+// table 单选
+.table-selection {
+  & > label {
+    display: none;
+  }
 }
 
 // pagination
@@ -109,7 +205,11 @@
 }
 
 .el-pagination.is-background .el-pager li {
-  color: #333;
+  color: #666;
+  &:hover {
+    background: #235e96;
+    color: #fff !important;
+  }
 }
 
 .el-pagination__total {
@@ -131,22 +231,37 @@
 .el-select .el-input__inner:focus,
 .el-select .el-input.is-focus .el-input__inner,
 .el-input.is-active .el-input__inner,
-.el-input__inner:focus {
-  border-color: @primary;
+.el-input__inner:focus, .el-input__inner:hover, .el-select .el-input__inner:hover {
+  border-color: @primary !important;
 }
 
 .el-select-dropdown__item.selected {
-  color: @primary;
+  color: @primary !important;
 }
 
 // input disabled
 .el-input.is-disabled .el-input__inner {
-  .disabled
+  background-color: #fff !important;
+  color: #333 !important;
+  border-color: #ccc !important;
+}
+
+// .el-form-item__error
+.el-form-item--mini.el-form-item, .el-form-item--small.el-form-item {
+  margin-bottom: 2px;
+}
+
+.el-form-item__error {
+  color: #fa5151;
+  position: relative;
+}
+.el-form-item--small .el-form-item__error {
+  padding-top: 4px;
 }
 
 // tooltip
 .tooltip-font {
-  width: 250px;
+  max-width: 250px;
   line-height: 20px;
 }
 
@@ -164,6 +279,9 @@
   opacity: 0.8;
 }
 
+.el-tooltip__popper {
+  max-width: 250px;
+}
 // switch
 .el-switch.is-checked .el-switch__core {
   .borderAndBackColor
@@ -196,20 +314,41 @@
 }
 
 .el-message {
-  width: auto;
-  min-width: auto;
+  width: auto !important;
+  min-width: auto !important;
   top: 80px !important;
-  padding: 12px;
+  padding: 14px !important;
+  z-index: 9999 !important;
+  &.login-message {
+    top:  calc(10vh + 155px)  !important;
+    left: calc(100vw - 20.3%)  !important;
+  }
+}
+
+.el-message__closeBtn {
+  right: 12px;
 }
 
 // tree
+
+.el-tree-node__content {
+  height: 28px;
+}
+
 .el-tree--highlight-current .el-tree-node.is-current>.el-tree-node__content {
   background-color: @primary;
   color: #fff;
 }
 
+.el-tree-node__content:hover {
+  background-color: #e0e0e0;
+}
+
 // cascader
 .el-cascader .el-input .el-input__inner:focus, .el-cascader .el-input.is-focus .el-input__inner {
+  border-color: @primary;
+}
+.el-cascader .el-input .el-input__inner:hover {
   border-color: @primary;
 }
 
@@ -218,13 +357,15 @@
 }
 
 // textarea
-.el-textarea__inner:focus {
-  border-color: @primary;
+.el-textarea__inner:focus, .el-textarea__inner:hover {
+  border-color: @primary !important;
 }
 
 // textarea disabled
 .el-textarea.is-disabled .el-textarea__inner {
-  .disabled
+  background-color: #fff !important;
+  color: #333 !important;
+  border-color: #ccc !important;
 }
 
 // 下来菜单
@@ -241,3 +382,44 @@
 // .el-loading-spinner i,.el-loading-spinner .el-loading-text  {
 //   color: #fff
 // }
+
+//  loading
+
+.el-loading-mask {
+  z-index: 4000 !important;
+}
+
+.el-checkbox__inner {
+  border-color: #999;
+}
+
+.iconfont {
+  font-size: 12px;
+}
+
+
+// form - label
+.custom-form-label {
+  color: #F56C6C;
+  margin-right: 4px;
+}
+
+.el-form-item__label {
+  background: #eee;
+}
+
+.row-label {
+  label {
+    line-height: 68px !important;
+  }
+}
+
+// 文件上传的动画
+.el-upload-list__item {
+  transition: none !important;
+}
+
+// confirm 弹框
+.el-message-box__wrapper {
+  z-index: 9999 !important;
+}

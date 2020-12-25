@@ -3,6 +3,10 @@ node_modules
 /dist
 /static/dll
 .history
+job.yaml
+Dockerfile
+# /config/proxy.dev.js
+# /src/puzzles
 # local env files
 .env.local
 .env.*.local
