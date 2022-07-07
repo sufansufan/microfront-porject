@@ -23,7 +23,7 @@
     "jsrsasign": "^9.1.9",
     "loadjs": "^3.6.1",
     "minireset.css": "0.0.5",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "nprogress": "^0.2.0",
     "sql-formatter": "^2.3.3",
     "tinymce": "^5.4.1",
